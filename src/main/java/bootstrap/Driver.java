@@ -14,16 +14,19 @@ public class Driver {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Hello World");
+        configureLogging("var/log/gitintro/", "");
     }
-    public static String configureLogging(String logFile,String logLevel){
+    public static String configureLogging(String logDirectory,String logLevel){
         DailyRollingFileAppender dailyRollingFileAppender = new DailyRollingFileAppender();
 
         String logFilename="";
         switch(logLevel){
             case "DEBUG":{
                 dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.DEBUG_INT));
+                logFilename = logDirectory + "introToGit.debug.log";
             }
             case "WARN":{
+                dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.WARN_INT));
                 dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.WARN_INT));
             }
             case "ERROR":{
@@ -31,11 +34,12 @@ public class Driver {
             }
             default:{
                 dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.INFO_INT));
+                logFilename = logDirectory + "introToGit.log";
             }
             break;
         }
-//        System.out.println("Log files written out at " + logFile);
-        dailyRollingFileAppender.setFile(logFile);
+        System.out.println("Log files written out at " + logFilename);
+        dailyRollingFileAppender.setFile(logFilename);
         dailyRollingFileAppender.setLayout(new EnhancedPatternLayout("%d [%t] %-5p %c - %m%n"));
 
         dailyRollingFileAppender.activateOptions();
